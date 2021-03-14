@@ -1,40 +1,25 @@
 package com.example.notifyhostilephonecalls.activities;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-
-import com.example.notifyhostilephonecalls.R;
-import com.example.notifyhostilephonecalls.phonecallReceiver.PhonecallReceiver;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import android.util.Log;
-import android.view.View;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-
-import java.util.Date;
-
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import com.example.notifyhostilephonecalls.phonecallReceiver.CallReceiver;
+import com.example.notifyhostilephonecalls.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class MainActivity extends AppCompatActivity
@@ -47,7 +32,6 @@ public class MainActivity extends AppCompatActivity
     IntentFilter intentFilter;
     CallReceiver callReceiver;
 
-    private NotificationManager mNotificationManager;
 
 
     private void init()
@@ -92,114 +76,6 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(callReceiver,intentFilter);
 
 
-
-
-
-    }
-
-
-    public class CallReceiver extends PhonecallReceiver
-    {
-
-
-
-        @Override
-        protected void onIncomingCallStarted(Context ctx, String number, Date start)
-        {
-
-            getPhoneNumberRating(number);
-
-        }
-
-        @Override
-        protected void onOutgoingCallStarted(Context ctx, String number, Date start)
-        {
-        }
-
-        @Override
-        protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end)
-        {
-        }
-
-        @Override
-        protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end)
-        {
-        }
-
-        @Override
-        protected void onMissedCall(Context ctx, String number, Date missed)
-        {
-        }
-
-
-
-        private void getPhoneNumberRating(String number)
-        {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    final StringBuilder builder = new StringBuilder();
-
-                    try {
-
-
-                        String url="https://www.white-pages.gr/arithmos/"+number+"/";//your website url
-
-                        Document   doc = Jsoup.connect(url).get();
-
-
-                        String rating = doc.getElementsByClass("td78").select("div#progress-bar-inner").text();
-
-
-
-
-                        NotificationCompat.Builder mBuilder =
-                                new NotificationCompat.Builder(getApplicationContext(), "notify_001");
-                        Intent ii = new Intent(getApplicationContext(), MainActivity.class);
-                        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, ii, 0);
-
-                        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-
-
-
-
-                        bigText.setBigContentTitle(number);
-
-                        mBuilder.setContentIntent(pendingIntent);
-                        mBuilder.setSmallIcon(R.drawable.ic_launcher_foreground);
-                        mBuilder.setContentTitle("Your Title");
-                        mBuilder.setContentText("Βαθμος Επικινδυνότητας: "+rating+"%");
-                        mBuilder.setPriority(Notification.PRIORITY_MAX);
-                        mBuilder.setStyle(bigText);
-
-                        mNotificationManager =
-                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                        // === Removed some obsoletes
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        {
-                            String channelId = "Your_channel_id";
-                            NotificationChannel channel = new NotificationChannel(
-                                    channelId,
-                                    "Channel human readable title",
-                                    NotificationManager.IMPORTANCE_HIGH);
-                            mNotificationManager.createNotificationChannel(channel);
-                            mBuilder.setChannelId(channelId);
-                        }
-
-                        mNotificationManager.notify(0, mBuilder.build());
-
-
-
-                    } catch (Exception e) {
-                        builder.append("Error : ").append(e.getMessage()).append("\n");
-                    }
-
-
-
-                }
-            }).start();
-        }
     }
 
 
