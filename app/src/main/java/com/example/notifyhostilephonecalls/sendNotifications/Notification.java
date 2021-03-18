@@ -15,7 +15,7 @@ import com.example.notifyhostilephonecalls.activities.MainActivity;
 public class Notification
 {
 
-    public void showNotification(String title, String phoneNumberRating, Context context)
+    public void showNotification(String number, String phoneNumberRating, Context context)
     {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context, "notify_001");
@@ -26,11 +26,11 @@ public class Notification
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
 
 
-        bigText.setBigContentTitle(title);
+        bigText.setBigContentTitle(number);
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.ic_launcher_foreground);
-        mBuilder.setContentTitle("Phone Number");
+        mBuilder.setContentTitle(number);
         mBuilder.setContentText("Βαθμος Επικινδυνότητας: " + phoneNumberRating + "%");
         mBuilder.setPriority(android.app.Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
