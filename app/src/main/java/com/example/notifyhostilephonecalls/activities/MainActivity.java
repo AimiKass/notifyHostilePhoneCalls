@@ -1,7 +1,7 @@
 package com.example.notifyhostilephonecalls.activities;
 
 import android.Manifest;
-import android.app.NotificationManager;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,11 +15,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notifyhostilephonecalls.phonecallReceiver.CallReceiver;
 import com.example.notifyhostilephonecalls.R;
+import com.example.notifyhostilephonecalls.SQLite.DBHandler;
+import com.example.notifyhostilephonecalls.adapters.RecyclerViewAdapter;
+import com.example.notifyhostilephonecalls.models.PhoneNumber;
+import com.example.notifyhostilephonecalls.phonecallReceiver.PhonecallReceiver;
+import com.example.notifyhostilephonecalls.retrieveData.ExtractFromSite;
+import com.example.notifyhostilephonecalls.sendNotifications.Notification;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity
@@ -32,12 +42,33 @@ public class MainActivity extends AppCompatActivity
     IntentFilter intentFilter;
     CallReceiver callReceiver;
 
+    private ArrayList<PhoneNumber> contacts;
+
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter rcAdapter;
+    private DBHandler dbHandler;
+    LinearLayoutManager linearLayoutManager;
+
+
 
 
     private void init()
     {
         intentFilter = new IntentFilter();
+        dbHandler = new DBHandler(MainActivity.this);
+        contacts = new ArrayList<>();
         callReceiver = new CallReceiver();
+
+        recyclerView = findViewById(R.id.my_recycler_view);
+
+        contacts = dbHandler.getAllNumbers();
+
+        rcAdapter = new RecyclerViewAdapter(contacts, this);
+
+        linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(rcAdapter);
+
     }
 
 
@@ -53,13 +84,24 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Coming Soon !!!", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "List Deleted", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+
+                dbHandler.clearDatabase();
+                contacts.clear();
+
+                rcAdapter.notifyDataSetChanged();
+//                Toast.makeText(MainActivity.this, "number has been added.", Toast.LENGTH_SHORT).show();
+
+
+
             }
         });
 
@@ -76,6 +118,15 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(callReceiver,intentFilter);
 
 
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        // TODO: 3/18/2021 check what is the reason for this!  
+//        contacts = dbHandler.getAllNumbers();
+        rcAdapter.notifyDataSetChanged();
     }
 
 
@@ -99,11 +150,75 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            dbHandler.clearDatabase();
+            rcAdapter.notifyDataSetChanged();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    // TODO: 3/18/2021 try a way to separate this class
+    public class CallReceiver extends PhonecallReceiver
+    {
+
+
+        @Override
+        protected void onIncomingCallStarted(Context ctx, String number, Date start) {
+
+            notifyAboutTheIncomingNumber(number, ctx);
+
+        }
+
+        @Override
+        protected void onOutgoingCallStarted(Context ctx, String number, Date start) {
+        }
+
+        @Override
+        protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end) {
+        }
+
+        @Override
+        protected void onOutgoingCallEnded(Context ctx, String number, Date start, Date end) {
+        }
+
+        @Override
+        protected void onMissedCall(Context ctx, String number, Date missed) {
+        }
+
+
+        private void notifyAboutTheIncomingNumber(String number, Context context)
+        {
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run() {
+
+                    ExtractFromSite ex = new ExtractFromSite();
+                    Notification not = new Notification();
+                    DBHandler dbHandler = new DBHandler(context);
+
+                    String rating = ex.getPhoneNumberRating(number);
+
+                    if (rating == null)
+                        rating = "0";
+
+
+                    not.showNotification(number,rating,context);
+
+
+                    dbHandler.addPhoneNumber(number, rating);
+                    contacts.add(new PhoneNumber(number,rating));
+
+                }
+            }).start();
+        }
+
+
+    }
+
+
 
 
 
