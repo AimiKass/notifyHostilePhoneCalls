@@ -18,14 +18,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 {
 
     // variable for our array list and context
-    private ArrayList<PhoneNumber> courseModalArrayList;
+    private ArrayList<PhoneNumber> phoneNumbers;
     private Context context;
 
 
     // constructor
-    public RecyclerViewAdapter(ArrayList<PhoneNumber> courseModalArrayList, Context context)
+    public RecyclerViewAdapter(ArrayList<PhoneNumber> phoneNumbers, Context context)
     {
-        this.courseModalArrayList = courseModalArrayList;
+        this.phoneNumbers = phoneNumbers;
         this.context = context;
     }
 
@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     {
         // on below line we are setting data
         // to our views of recycler view item.
-        PhoneNumber model = courseModalArrayList.get(position);
+        PhoneNumber model = phoneNumbers.get(position);
 
         holder.phoneNumberTextView.setText(model.getPhoneNumber());
         holder.phoneRatingTextView.setText("Βαθμος Επικινδυνοτητας:"+model.getRating()+"%");
@@ -55,7 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount()
     {
         // returning the size of our array list
-        return courseModalArrayList.size();
+        return phoneNumbers.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder
@@ -75,5 +75,30 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
+    public ArrayList<PhoneNumber> getData()
+    {
+        return phoneNumbers;
+    }
+
+    public void removeItem(int position) {
+        phoneNumbers.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void addItem(PhoneNumber phoneNumber)
+    {
+        phoneNumbers.add(phoneNumber);
+        notifyDataSetChanged();
+    }
+
+    public String getPhonesNumber(int position)
+    {
+        return phoneNumbers.get(position).getPhoneNumber();
+    }
+
+    public void restoreItem(PhoneNumber item, int position) {
+        phoneNumbers.add(position, item);
+        notifyItemInserted(position);
+    }
 
 }
