@@ -6,10 +6,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="notify_for_app_launch">sharedPrefForNotificationAppLaunchedIs</string>
 
-    <string name="hello_first_fragment">Press "?" Button for more information</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
-
-    <string name="hello_world">Hello world!</string>
+    <integer name="swing_anim_time">750</integer>
 </resources>

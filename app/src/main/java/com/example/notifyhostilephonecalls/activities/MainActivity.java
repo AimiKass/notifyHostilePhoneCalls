@@ -9,10 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.notifyhostilephonecalls.R;
 import com.example.notifyhostilephonecalls.SQLite.DBHandler;
 import com.example.notifyhostilephonecalls.adapters.RecyclerViewAdapter;
+import com.example.notifyhostilephonecalls.adapters.SwipeCardViewAdapter;
 import com.example.notifyhostilephonecalls.models.PhoneNumber;
 import com.example.notifyhostilephonecalls.phonecallReceiver.PhonecallReceiver;
 import com.example.notifyhostilephonecalls.retrieveData.ExtractFromSite;
@@ -49,6 +53,9 @@ public class MainActivity extends AppCompatActivity
     private DBHandler dbHandler;
     LinearLayoutManager linearLayoutManager;
 
+    CoordinatorLayout coordinatorLayout;
+    private SwipeCardViewAdapter swipeCardViewAdapter;
+    Animation animation;
 
 
 
@@ -59,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         contacts = new ArrayList<>();
         callReceiver = new CallReceiver();
 
+        coordinatorLayout = findViewById(R.id.main_content);
+
         recyclerView = findViewById(R.id.my_recycler_view);
 
         contacts = dbHandler.getAllNumbers();
@@ -68,6 +77,9 @@ public class MainActivity extends AppCompatActivity
         linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(rcAdapter);
+
+        swipeCardViewAdapter = new SwipeCardViewAdapter(rcAdapter,recyclerView,this);
+        animation = AnimationUtils.loadAnimation(this, R.anim.swing_up_left);
 
     }
 
@@ -82,7 +94,7 @@ public class MainActivity extends AppCompatActivity
 
         init();
 
-
+        swipeCardViewAdapter.enable();
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -98,8 +110,6 @@ public class MainActivity extends AppCompatActivity
                 contacts.clear();
 
                 rcAdapter.notifyDataSetChanged();
-//                Toast.makeText(MainActivity.this, "number has been added.", Toast.LENGTH_SHORT).show();
-
 
 
             }
@@ -113,12 +123,15 @@ public class MainActivity extends AppCompatActivity
         }
 
 
+
         intentFilter.addAction("android.intent.action.PHONE_STATE");
         intentFilter.addAction("android.intent.action.NEW_OUTGOING_CALL");
         registerReceiver(callReceiver,intentFilter);
 
-
     }
+
+
+
 
     @Override
     protected void onStart()
@@ -127,6 +140,8 @@ public class MainActivity extends AppCompatActivity
         // TODO: 3/18/2021 check what is the reason for this!  
 //        contacts = dbHandler.getAllNumbers();
         rcAdapter.notifyDataSetChanged();
+        recyclerView.startAnimation(animation);
+
     }
 
 
@@ -196,7 +211,7 @@ public class MainActivity extends AppCompatActivity
                 public void run() {
 
                     ExtractFromSite ex = new ExtractFromSite();
-                    Notification not = new Notification();
+                    Notification notification = new Notification();
                     DBHandler dbHandler = new DBHandler(context);
 
                     String rating = ex.getPhoneNumberRating(number);
@@ -205,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                         rating = "0";
 
 
-                    not.showNotification(number,rating,context);
+                    notification.notifyAboutNumber(context,number,rating);
 
 
                     dbHandler.addPhoneNumber(number, rating);
@@ -217,8 +232,6 @@ public class MainActivity extends AppCompatActivity
 
 
     }
-
-
 
 
 
@@ -269,5 +282,11 @@ public class MainActivity extends AppCompatActivity
                 break;
             }
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
     }
 }
