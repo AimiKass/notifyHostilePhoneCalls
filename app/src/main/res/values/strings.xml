@@ -7,6 +7,21 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="notify_for_app_launch">sharedPrefForNotificationAppLaunchedIs</string>
+    <string name="needs_permissions">Need Permissions</string>
+    <string name="needs_permission">Need Permission</string>
+    <string name="tab_label1">1st Fragment</string>
+    <string name="tab_label2">2nd Fragment</string>
+    <string name="call_is_blocked">Call Is Blocked</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">"Android Studio "</string>
+    <string name="nav_header_subtitle">Header Subtitle</string>
+    <string name="fragment1_title">Incoming calls</string>
+    <string name="fragment2_title">Blocked Numbers</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="incoming_calls">Incoming Calls</string>
+    <string name="blocked_numbers">Blocked Numbers</string>
 
     <integer name="swing_anim_time">750</integer>
 </resources>

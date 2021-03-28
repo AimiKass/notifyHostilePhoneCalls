@@ -22,4 +22,9 @@
     <style name="Theme.NotifyHostilePhoneCalls.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.NotifyHostilePhoneCalls.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="Theme.NavigationDrawerActivity_delete.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.NavigationDrawerActivity_delete.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
