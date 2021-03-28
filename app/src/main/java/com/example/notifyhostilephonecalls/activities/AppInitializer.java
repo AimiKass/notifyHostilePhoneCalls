@@ -4,7 +4,6 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
-import android.os.NetworkOnMainThreadException;
 
 // TODO: 3/21/2021 rename class
 public class AppInitializer extends Application
