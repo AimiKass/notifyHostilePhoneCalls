@@ -5,4 +5,7 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-</resources>
+    
+    <style name="TextAppearance.AppCompat.Small" parent=""/>
+    <style name="Preference_TextAppearanceMaterialSubhead" parent=""/>
+    </resources>

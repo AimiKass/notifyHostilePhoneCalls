@@ -32,7 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Fragment1 extends Fragment implements View.OnClickListener
+public class IncomingCallsFragment extends Fragment implements View.OnClickListener
 {
 
     private Animation animation;
@@ -48,7 +48,7 @@ public class Fragment1 extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View rootView = inflater.inflate(R.layout.tab_fragment1, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_incoming_calls, container, false);
         FloatingActionButton fab1 = (FloatingActionButton) rootView.findViewById(R.id.fragment1_fab_btn);
         fab1.setOnClickListener(this);
 

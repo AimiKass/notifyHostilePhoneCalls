@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_inc_calls"
-        android:name="com.example.notifyhostilephonecalls.fragments.Fragment1"
+        android:name="com.example.notifyhostilephonecalls.fragments.IncomingCallsFragment"
         android:label="@string/fragment1_title"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_block_numbers"
-        android:name="com.example.notifyhostilephonecalls.fragments.Fragment2"
+        android:name="com.example.notifyhostilephonecalls.fragments.BlockedNumbersFragment"
         android:label="@string/fragment2_title"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_blocked_numbers" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.navigationdraweractivity_delete.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_settings"
+        android:name="com.example.notifyhostilephonecalls.fragments.SettingsFragment"
+        android:label="@string/settings"
+        tools:layout="" />
 </navigation>
