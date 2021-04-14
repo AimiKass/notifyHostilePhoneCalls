@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 
 public class ExtractRating
 {
-    String rating;
+    String rating = null;
 
 
     public void run(String number)
@@ -26,8 +26,7 @@ public class ExtractRating
                     rating = doc.getElementsByClass("td78").select("div#progress-bar-inner").text();
                 } catch (Exception e)
                 {
-                    stringBuilder.append("Error : ").append(e.getMessage()).append("\n");
-                    rating = "101";
+                    rating = null;
                 }
 
 

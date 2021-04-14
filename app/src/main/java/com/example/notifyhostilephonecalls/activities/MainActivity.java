@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.notifyhostilephonecalls.R;
 import com.example.notifyhostilephonecalls.utils.Permissions;
+import com.example.notifyhostilephonecalls.utils.Settings;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -22,13 +23,15 @@ public class MainActivity extends AppCompatActivity
 {
     private AppBarConfiguration mAppBarConfiguration;
 
+    // TODO: 4/12/2021 check this sit
+    public static final String ACTION_SETTINGS = "com.example.notifyhostilephonecalls.ACTION_SETTINGS";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
-
-
+        Settings.applyCurrentTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -38,15 +41,20 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inc_calls, R.id.nav_block_numbers, R.id.nav_slideshow).setDrawerLayout(drawer).build();
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_inc_calls, R.id.nav_block_numbers, R.id.nav_settings).setDrawerLayout(drawer).build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
 
-
-
+        // TODO: 4/14/2021 look that external storage permission  
+        //permissions
         Permissions.checkAndRequest(this);
+
+
+        // init settings defaults
+        Settings.initDefaults(this);
+
 
 
     }

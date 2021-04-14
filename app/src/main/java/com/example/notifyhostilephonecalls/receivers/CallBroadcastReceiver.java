@@ -16,15 +16,17 @@ import com.example.notifyhostilephonecalls.models.PhoneNumber;
 import com.example.notifyhostilephonecalls.sendNotifications.Notification;
 import com.example.notifyhostilephonecalls.utils.ExtractRating;
 import com.example.notifyhostilephonecalls.utils.Permissions;
+import com.example.notifyhostilephonecalls.utils.Settings;
 
 import java.lang.reflect.Method;
 
-public class CallBroadcastReceiver  extends BroadcastReceiver
+public class CallBroadcastReceiver extends BroadcastReceiver
 {
-    private static final String TAG = CallBroadcastReceiver.class.getName();
     public static final int PIE_API_VERSION = 28;
-    private boolean newIncomingCallIs = true;
+    private static final String TAG = CallBroadcastReceiver.class.getName();
     Notification notification = new Notification();
+    private boolean newIncomingCallIs = true;
+    private String rating = null;
 
 
     @Override
@@ -32,15 +34,13 @@ public class CallBroadcastReceiver  extends BroadcastReceiver
     {
 
 
-        if (!Permissions.isGranted(context, Permissions.READ_PHONE_STATE) ||
-                !Permissions.isGranted(context, Permissions.CALL_PHONE))
+        if (!Permissions.isGranted(context, Permissions.READ_PHONE_STATE) || !Permissions.isGranted(context, Permissions.CALL_PHONE))
         {
             return;
         }
 
         // get telephony service
-        TelephonyManager telephony = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephony.getCallState() != TelephonyManager.CALL_STATE_RINGING)
         {
             return;
@@ -59,37 +59,65 @@ public class CallBroadcastReceiver  extends BroadcastReceiver
             ExtractRating extract = new ExtractRating();
 
 
-
-
-
-            //if incoming number is in blockedList the call will terminate
-            for (PhoneNumber blockedNumber:dbBlockedNumbersHandler.getAllNumbers())
-                if (blockedNumber.getPhoneNumber().equals(incomingCallNumber))
-                {
-                    breakCallAndNotify(context,incomingCallNumber);
-                    newIncomingCallIs = false;
-                    break;
-                }
-
-
-            if (newIncomingCallIs)
+            //if block_all_calls in settings is checked
+            if (Settings.getBooleanValue(context, Settings.BLOCK_ALL_CALLS))
             {
-                String rating = extract.getRating(incomingCallNumber);
-                if (rating.equals("101"))
+                breakCallAndNotify(context, incomingCallNumber);
+                newIncomingCallIs = false;
+            }
+
+
+            //if block_calls_from_black_list in settings is checked
+            if (Settings.getBooleanValue(context, Settings.BLOCK_CALLS_FROM_BLACK_LIST))
+            {
+                for (PhoneNumber blockedNumber : dbBlockedNumbersHandler.getAllNumbers())
+                    if (blockedNumber.getPhoneNumber().equals(incomingCallNumber))
+                    {
+                        breakCallAndNotify(context, incomingCallNumber);
+                        newIncomingCallIs = false;
+                        break;
+                    }
+            }
+
+
+            // if auto_block_hostile_calls in settings is checked
+            if (Settings.getBooleanValue(context, Settings.AUTO_BLOCK_HOSTILE_CALLS))
+            {
+                rating = extract.getRating(incomingCallNumber);
+                if (rating != null)
                 {
-                    notification.weakOrNoInternet(context,incomingCallNumber);
-                    dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber,"U/N");
-                }
-                else
-                {
-                    dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber,rating);
-                    notification.onNewPhoneCall(context,incomingCallNumber,rating);
+                    if (Integer.parseInt(rating) > 0)
+                    {
+                        breakCallAndNotify(context, incomingCallNumber);
+                        for (PhoneNumber blockedNumber:dbBlockedNumbersHandler.getAllNumbers() )
+                        {
+                            if (blockedNumber.getPhoneNumber().equals(incomingCallNumber))
+                                break;
+                        }
+
+                    }else
+                    {
+                        dbBlockedNumbersHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
+                        newIncomingCallIs = false;
+                    }
                 }
             }
 
+            //if incoming call is hostile rite in log and notify
+            if (newIncomingCallIs)
+            {
+                rating = extract.getRating(incomingCallNumber);
+                if (rating != null || Integer.parseInt(rating) >0 )
+                {
+                    dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
+                    notification.onNewPhoneCall(context, incomingCallNumber, String.valueOf(rating));
+                }
+            }
+
+
+
+
         }
-
-
     }
 
     // Ends phone call
@@ -103,12 +131,13 @@ public class CallBroadcastReceiver  extends BroadcastReceiver
         if (Build.VERSION.SDK_INT >= PIE_API_VERSION)
         {
             breakCallPieAndHigher(context);
-        } else {
+        } else
+        {
             breakCallNougatAndLower(context);
         }
 
 
-        notification.onCallBlocked(context,number);
+        notification.onCallBlocked(context, number);
 
 
     }
@@ -117,16 +146,17 @@ public class CallBroadcastReceiver  extends BroadcastReceiver
     private void breakCallNougatAndLower(Context context)
     {
         Log.d(TAG, "Trying to break call for Nougat and lower with TelephonyManager.");
-        TelephonyManager telephony = (TelephonyManager)
-                context.getSystemService(Context.TELEPHONY_SERVICE);
-        try {
+        TelephonyManager telephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        try
+        {
             Class c = Class.forName(telephony.getClass().getName());
             Method m = c.getDeclaredMethod("getITelephony");
             m.setAccessible(true);
             ITelephony telephonyService = (ITelephony) m.invoke(telephony);
             telephonyService.endCall();
             Log.d(TAG, "Invoked 'endCall' on TelephonyService.");
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             Log.e(TAG, "Could not end call. Check stdout for more info.");
             e.printStackTrace();
         }
@@ -136,12 +166,13 @@ public class CallBroadcastReceiver  extends BroadcastReceiver
     private void breakCallPieAndHigher(Context context)
     {
         Log.d(TAG, "Trying to break call for Pie and higher with TelecomManager.");
-        TelecomManager telecomManager = (TelecomManager)
-                context.getSystemService(Context.TELECOM_SERVICE);
-        try {
+        TelecomManager telecomManager = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
+        try
+        {
             telecomManager.getClass().getMethod("endCall").invoke(telecomManager);
             Log.d(TAG, "Invoked 'endCall' on TelecomManager.");
-        } catch (Exception e) {
+        } catch (Exception e)
+        {
             Log.e(TAG, "Could not end call. Check stdout for more info.");
             e.printStackTrace();
         }
