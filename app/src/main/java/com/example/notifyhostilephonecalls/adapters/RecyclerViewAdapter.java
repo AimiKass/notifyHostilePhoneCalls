@@ -48,7 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         PhoneNumber model = phoneNumbers.get(position);
 
         holder.phoneNumberTextView.setText(model.getPhoneNumber());
-        holder.phoneRatingTextView.setText("Βαθμος Επικινδυνοτητας:"+model.getRating()+"%");
+        holder.phoneRatingTextView.setText("Hostility Rating:"+model.getRating()+"%");
     }
 
     @Override

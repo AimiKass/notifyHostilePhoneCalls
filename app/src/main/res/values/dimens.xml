@@ -7,4 +7,19 @@
     <dimen name="pref_seekbar_fix_positive">8dp </dimen>
     <dimen name="preference_seekbar_padding_end">8dp </dimen>
     <dimen name="preference_seekbar_value_width">8dp </dimen>
+
+
+
+    <dimen name="textSize12">12sp</dimen>
+    <dimen name="textSize13">13sp</dimen>
+    <dimen name="textSize14">14sp</dimen>
+    <dimen name="textSize15">15sp</dimen>
+    <dimen name="textSize16">16sp</dimen>
+    <dimen name="textSize18">18sp</dimen>
+    <dimen name="textSize20">20sp</dimen>
+    <dimen name="textSize22">22sp</dimen>
+    <dimen name="toolbarHeight">45dp</dimen>
+
+    <bool name="isTablet">false</bool>
+    <item name="iconScale" format="float" type="dimen">1</item>
 </resources>

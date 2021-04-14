@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.notifyhostilephonecalls.R;
 import com.example.notifyhostilephonecalls.activities.MainActivity;
+import com.example.notifyhostilephonecalls.utils.Settings;
 
 
 // TODO: 3/25/2021 create not to send periodically in order for app to keep running in the backgtound
@@ -21,21 +22,26 @@ public class Notification
     // Notification on call blocked
     public void onCallBlocked(Context context, String phoneNumber)
     {
+        if (Settings.getBooleanValue(context,Settings.BLOCKED_CALL_STATUS_NOTIFICATION))
+        {
+            String message = context.getString(R.string.call_is_blocked);
+            int icon = R.drawable.ic_block;
+            //        String action = ;
+            Intent intent = new Intent(context, MainActivity.class);
 
-        String message = context.getString(R.string.call_is_blocked);
-        int icon = R.drawable.ic_block;
-        //        String action = ;
-        Intent intent = new Intent(context, MainActivity.class);
-
-        notify(context, phoneNumber, message, intent,0, icon);
+            notify(context, phoneNumber, message, intent,0, icon);
+        }
     }
 
     public void onNewPhoneCall(Context context, String phoneNumber,String rating)
     {
-        String message = "Hostility Rating:"+rating+"%";
-        int icon = R.drawable.inc_phone_call_icn;
-        Intent intent = new Intent(context, MainActivity.class);
-        notify(context, phoneNumber, message, intent,1, icon);
+        if (Settings.getBooleanValue(context,Settings.HOSTILE_CALL_STATUS_NOTIFICATION))
+        {
+            String message = "Hostility Rating:"+rating+"%";
+            int icon = R.drawable.inc_phone_call_icn;
+            Intent intent = new Intent(context, MainActivity.class);
+            notify(context, phoneNumber, message, intent,1, icon);
+        }
     }
 
     public void weakOrNoInternet(Context context, String phoneNumber)

@@ -107,6 +107,7 @@ public class DBIncomingCallsHandler extends SQLiteOpenHelper
         // at last closing our cursor
         // and returning our array list.
         cursorCourses.close();
+        db.close();
         return courseModalArrayList;
     }
 
@@ -150,6 +151,7 @@ public class DBIncomingCallsHandler extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
         String clearDBQuery = "DELETE FROM " + TABLE_INCOMING_CALLS_NAME;
         db.execSQL(clearDBQuery);
+        db.close();
     }
 
 

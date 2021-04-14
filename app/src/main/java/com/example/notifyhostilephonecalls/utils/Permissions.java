@@ -36,10 +36,16 @@ public class Permissions
     public static final String READ_CALL_LOG = "android.permission.READ_CALL_LOG";
     public static final String ANSWER_PHONE_CALLS = "android.permission.ANSWER_PHONE_CALLS";
 
+    public static final String WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
+
+
     private static ArrayList<String> PERMISSIONS = new ArrayList<>(Arrays.asList(
             CALL_PHONE,
             READ_PHONE_STATE,
-            READ_CALL_LOG
+            READ_CALL_LOG,
+
+
+            WRITE_EXTERNAL_STORAGE
     ));
 
     static {
@@ -68,6 +74,15 @@ public class Permissions
         }
         return result;
     }
+
+    /**
+     * Resets permissions results cache
+     **/
+    public static void invalidateCache()
+    {
+        permissionsResults.clear();
+    }
+
 
 
     /**

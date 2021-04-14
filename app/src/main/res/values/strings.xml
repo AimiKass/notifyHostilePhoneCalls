@@ -41,4 +41,19 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="Menu_button">Menu button</string>
+    <string name="Calls_blocking">Calls blocking</string>
+    <string name="Calls_blocking_notification">Calls blocking notification</string>
+    <string name="UI_theme_dark">UI dark theme</string>
+    <string name="App_interface">App interface</string>
+    <string name="All_calls">All calls</string>
+    <string name="Black_list">Black list</string>
+    <string name="Block_all_calls">Block all calls</string>
+    <string name="Block_calls_from_black_list">Block calls from black list</string>
+    <string name="Notify_blocked_calls">Notify blocked calls</string>
+    <string name="Notify_in_status_bar_blocked_call">Notify in status bar blocked calls</string>
+    <string name="Notify_hostile_calls">Notify hostile calls</string>
+    <string name="Notify_in_status_bar_hostile_call">Notify in status bar about incoming hostile calls</string>
+    <string name="Hostile_calls">Hostile calls</string>
+    <string name="Autoblock_incoming_hostile_calls">"Block automatically hostile calls (internet required) "</string>
 </resources>
