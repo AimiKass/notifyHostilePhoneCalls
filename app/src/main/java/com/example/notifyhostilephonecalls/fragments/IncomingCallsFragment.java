@@ -125,7 +125,6 @@ public class IncomingCallsFragment extends Fragment implements View.OnClickListe
                     dbBlockedNumbersHandler.addPhoneNumber(rcAdapter.getData().get(position).getPhoneNumber(),rcAdapter.getData().get(position).getRating());
                     dbIncomingCallsHandler.deletePhoneNumber(rcAdapter.getData().get(position).getPhoneNumber());
                     rcAdapter.removeItem(position);
-//                    Fragment2.refreshRVAdapter();
                 }
             }
 

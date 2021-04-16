@@ -133,7 +133,7 @@ public class DBBlockedNumbersHandler extends SQLiteOpenHelper
 
 
     // below is the method for deleting our course.
-    public void deletePhoneNumber(String courseName)
+    public void deletePhoneNumber(String phoneNumber)
     {
 
         // on below line we are creating
@@ -142,7 +142,7 @@ public class DBBlockedNumbersHandler extends SQLiteOpenHelper
 
         // on below line we are calling a method to delete our
         // course and we are comparing it with our course name.
-        db.delete(TABLE_BLOCKED_NUMBERS_NAME, "number=?", new String[]{courseName});
+        db.delete(TABLE_BLOCKED_NUMBERS_NAME, "number=?", new String[]{phoneNumber});
         db.close();
     }
 
@@ -152,6 +152,7 @@ public class DBBlockedNumbersHandler extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
         String clearDBQuery = "DELETE FROM " + TABLE_BLOCKED_NUMBERS_NAME;
         db.execSQL(clearDBQuery);
+        db.close();
     }
 
 
