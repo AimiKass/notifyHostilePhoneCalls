@@ -93,24 +93,33 @@ public class CallBroadcastReceiver extends BroadcastReceiver
                         {
                             if (blockedNumber.getPhoneNumber().equals(incomingCallNumber))
                                 break;
+                            else
+                            {
+                                dbBlockedNumbersHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
+                                newIncomingCallIs = false;
+                            }
                         }
 
-                    }else
-                    {
-                        dbBlockedNumbersHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
-                        newIncomingCallIs = false;
                     }
                 }
             }
 
-            //if incoming call is hostile rite in log and notify
+
             if (newIncomingCallIs)
             {
                 rating = extract.getRating(incomingCallNumber);
-                if (rating != null || Integer.parseInt(rating) >0 )
+
+                //if incoming call is hostile rite in log and notify
+                if (rating == null )
+                {
+                    dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber, " unknown");
+                }else if (Integer.parseInt(rating) > 0)
                 {
                     dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
                     notification.onNewPhoneCall(context, incomingCallNumber, String.valueOf(rating));
+                }else
+                {
+                    dbIncomingCallsHandler.addPhoneNumber(incomingCallNumber, String.valueOf(rating));
                 }
             }
 
