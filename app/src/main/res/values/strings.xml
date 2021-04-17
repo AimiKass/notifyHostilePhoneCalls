@@ -15,8 +15,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="nav_header_title">"Android Studio "</string>
-    <string name="nav_header_subtitle">Header Subtitle</string>
+    <string name="nav_header_subtitle">Powerde by</string>
     <string name="fragment1_title">Incoming calls</string>
     <string name="fragment2_title">Blocked Numbers</string>
     <string name="menu_slideshow">Slideshow</string>
@@ -56,4 +55,5 @@
     <string name="Notify_in_status_bar_hostile_call">Notify in status bar about incoming hostile calls</string>
     <string name="Hostile_calls">Hostile calls</string>
     <string name="Autoblock_incoming_hostile_calls">"Block automatically hostile calls (internet required) "</string>
+    <string name="nav_header_title">Notify Hostile Phone Calls</string>
 </resources>
