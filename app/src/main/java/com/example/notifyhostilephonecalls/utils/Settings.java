@@ -112,7 +112,7 @@ public class Settings
         map.put(UI_THEME_DARK, FALSE);
 //        map.put(GO_TO_JOURNAL_AT_START, FALSE);
 //        map.put(REMOVE_FROM_CALL_LOG, FALSE);
-        map.put(AUTO_BLOCK_HOSTILE_CALLS,FALSE);
+        map.put(AUTO_BLOCK_HOSTILE_CALLS,TRUE);
 
         if (!Permissions.isGranted(context, Permissions.WRITE_EXTERNAL_STORAGE))
         {

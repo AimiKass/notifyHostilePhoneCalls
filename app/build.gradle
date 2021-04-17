@@ -15,6 +15,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -48,5 +49,9 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.takisoft.fix:preference-v7:25.3.0.0'
+
+    implementation 'com.google.android.gms:play-services-ads:20.0.0'
+
+    implementation 'com.google.firebase:firebase-core:18.0.3'
 
 }

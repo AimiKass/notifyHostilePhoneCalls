@@ -26,6 +26,11 @@ import com.example.notifyhostilephonecalls.R;
 import com.example.notifyhostilephonecalls.SQLite.DBBlockedNumbersHandler;
 import com.example.notifyhostilephonecalls.adapters.RecyclerViewAdapter;
 import com.example.notifyhostilephonecalls.models.PhoneNumber;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -42,6 +47,7 @@ public class BlockedNumbersFragment extends Fragment implements View.OnClickList
 
     private Paint paint;
 
+    private AdView adView;
 
 
     @Override
@@ -54,10 +60,8 @@ public class BlockedNumbersFragment extends Fragment implements View.OnClickList
         return rootView;
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState)
+    private void init()
     {
-        super.onViewCreated(view, savedInstanceState);
-
         dbBlockedNumbersHandler = new DBBlockedNumbersHandler(getContext());
         paint = new Paint();
 
@@ -74,6 +78,29 @@ public class BlockedNumbersFragment extends Fragment implements View.OnClickList
         recyclerView.setAdapter(rcAdapter);
         recyclerView.setAnimation(animation);
 
+
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener()
+        {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus)
+            {
+
+            }
+        });
+
+        adView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+
+
+
+        init();
 
 
 

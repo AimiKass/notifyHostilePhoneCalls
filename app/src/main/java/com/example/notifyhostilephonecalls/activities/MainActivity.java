@@ -16,6 +16,11 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.notifyhostilephonecalls.R;
 import com.example.notifyhostilephonecalls.utils.Permissions;
 import com.example.notifyhostilephonecalls.utils.Settings;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -25,6 +30,8 @@ public class MainActivity extends AppCompatActivity
 
     // TODO: 4/12/2021 check this sit
     public static final String ACTION_SETTINGS = "com.example.notifyhostilephonecalls.ACTION_SETTINGS";
+
+    private AdView mAdView;
 
 
     @Override
@@ -54,6 +61,8 @@ public class MainActivity extends AppCompatActivity
 
         // init settings defaults
         Settings.initDefaults(this);
+
+
 
 
 

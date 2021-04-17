@@ -28,6 +28,12 @@ import com.example.notifyhostilephonecalls.SQLite.DBIncomingCallsHandler;
 import com.example.notifyhostilephonecalls.adapters.RecyclerViewAdapter;
 import com.example.notifyhostilephonecalls.models.PhoneNumber;
 import com.example.notifyhostilephonecalls.utils.Utils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdValue;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -44,6 +50,7 @@ public class IncomingCallsFragment extends Fragment implements View.OnClickListe
 
     Paint paint;
 
+    private AdView adView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -60,11 +67,33 @@ public class IncomingCallsFragment extends Fragment implements View.OnClickListe
     //in order to keep RC updated both onViewCreated() and onStart()
     private void init()
     {
+        dbIncomingCallsHandler = new DBIncomingCallsHandler(getContext());
+        paint = new Paint();
+        contacts = new ArrayList<>();
+
+        recyclerView = getView().findViewById(R.id.recycler_view_fragment_1);
+        linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
+
+
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.swing_up_left);
         contacts = dbIncomingCallsHandler.getAllNumbers();
         rcAdapter = new RecyclerViewAdapter(contacts, getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(rcAdapter);
+
+
+        MobileAds.initialize(getContext(), new OnInitializationCompleteListener()
+        {
+            @Override
+            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus)
+            {
+
+            }
+        });
+
+        adView = getView().findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 
     }
 
@@ -74,17 +103,7 @@ public class IncomingCallsFragment extends Fragment implements View.OnClickListe
     {
         super.onViewCreated(view, savedInstanceState);
 
-        dbIncomingCallsHandler = new DBIncomingCallsHandler(getContext());
-        paint = new Paint();
-        contacts = new ArrayList<>();
-
-        recyclerView = getView().findViewById(R.id.recycler_view_fragment_1);
-        linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
-
         init();
-
-
-
 
 
 

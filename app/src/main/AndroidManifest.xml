@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotifyHostilePhoneCalls">
 
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"/>
 
         <activity
             android:name=".activities.MainActivity"
